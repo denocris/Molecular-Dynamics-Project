@@ -18,7 +18,7 @@
 #include "output.h"
 #include "verlet1.h"
 #include "test1.h"
-
+#include "test2.h"
 
 /* a few physical constants */
 const double kboltz=0.0019872067;     /* boltzman constant in kcal/mol/K */
@@ -31,6 +31,7 @@ int main(int argc, char **argv)
     /* Test sections */
 
     test_few_atoms();
+    test_kinetic();
 
     int nprint, i;
     char restfile[BLEN], trajfile[BLEN], ergfile[BLEN], line[BLEN];
