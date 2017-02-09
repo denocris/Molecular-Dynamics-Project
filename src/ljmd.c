@@ -17,6 +17,7 @@
 #include "force.h"
 #include "output.h"
 #include "verlet1.h"
+#include "test1.h"
 
 
 /* a few physical constants */
@@ -27,11 +28,15 @@ const double mvsq2e=2390.05736153349; /* m*v^2 in kcal/mol */
 /* main */
 int main(int argc, char **argv)
 {
+    /* Test sections */
+
+    test_few_atoms();
+
     int nprint, i;
     char restfile[BLEN], trajfile[BLEN], ergfile[BLEN], line[BLEN];
     FILE *fp,*traj,*erg;
     mdsys_t sys;
-    
+
     read_input(&sys, &nprint,restfile,trajfile,ergfile,line);
 
     /* read restart */
