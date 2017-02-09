@@ -1,4 +1,4 @@
-/* 
+/*
  * simple lennard-jones potential MD code with velocity verlet.
  * units: Length=Angstrom, Mass=amu; Energy=kcal
  *
@@ -18,7 +18,7 @@
 const double kboltz=0.0019872067;     /* boltzman constant in kcal/mol/K */
 const double mvsq2e=2390.05736153349; /* m*v^2 in kcal/mol */
 
-/* structure to hold the complete information 
+/* structure to hold the complete information
  * about the MD system */
 struct _mdsys {
     int natoms,nfi,nsteps;
@@ -58,7 +58,7 @@ static int get_a_line(FILE *fp, char *buf)
     }
     return 0;
 }
- 
+
 /* helper function: zero out an array */
 static void azzero(double *d, const int n)
 {
@@ -78,7 +78,7 @@ static double pbc(double x, const double boxby2)
 
 /* compute kinetic energy */
 static void ekin(mdsys_t *sys)
-{   
+{
     int i;
 
     sys->ekin=0.0;
@@ -89,7 +89,7 @@ static void ekin(mdsys_t *sys)
 }
 
 /* compute forces */
-static void force(mdsys_t *sys) 
+static void force(mdsys_t *sys)
 {
     double r,ffac;
     double rx,ry,rz;
@@ -106,18 +106,18 @@ static void force(mdsys_t *sys)
 
             /* particles have no interactions with themselves */
             if (i==j) continue;
-            
+
             /* get distance between particle i and j */
             rx=pbc(sys->rx[i] - sys->rx[j], 0.5*sys->box);
             ry=pbc(sys->ry[i] - sys->ry[j], 0.5*sys->box);
             rz=pbc(sys->rz[i] - sys->rz[j], 0.5*sys->box);
             r = sqrt(rx*rx + ry*ry + rz*rz);
-      
+
             /* compute force and energy if within cutoff */
             if (r < sys->rcut) {
                 ffac = -4.0*sys->epsilon*(-12.0*pow(sys->sigma/r,12.0)/r
                                          +6*pow(sys->sigma/r,6.0)/r);
-                
+
                 sys->epot += 0.5*4.0*sys->epsilon*(pow(sys->sigma/r,12.0)
                                                -pow(sys->sigma/r,6.0));
 
@@ -159,7 +159,7 @@ static void velverlet(mdsys_t *sys)
 static void output(mdsys_t *sys, FILE *erg, FILE *traj)
 {
     int i;
-    
+
     printf("% 8d % 20.8f % 20.8f % 20.8f % 20.8f\n", sys->nfi, sys->temp, sys->ekin, sys->epot, sys->ekin+sys->epot);
     fprintf(erg,"% 8d % 20.8f % 20.8f % 20.8f % 20.8f\n", sys->nfi, sys->temp, sys->ekin, sys->epot, sys->ekin+sys->epot);
     fprintf(traj,"%d\n nfi=%d etot=%20.8f\n", sys->natoms, sys->nfi, sys->ekin+sys->epot);
@@ -170,7 +170,7 @@ static void output(mdsys_t *sys, FILE *erg, FILE *traj)
 
 
 /* main */
-int main(int argc, char **argv) 
+int main(int argc, char **argv)
 {
     int nprint, i;
     char restfile[BLEN], trajfile[BLEN], ergfile[BLEN], line[BLEN];
@@ -233,7 +233,7 @@ int main(int argc, char **argv)
     sys.nfi=0;
     force(&sys);
     ekin(&sys);
-    
+
     erg=fopen(ergfile,"w");
     traj=fopen(trajfile,"w");
 
