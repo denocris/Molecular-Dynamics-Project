@@ -35,6 +35,8 @@ int get_a_line(FILE *fp, char *buf)
 
 int read_input(mdsys_t* sys, int * nprint, char * restfile, char * trajfile, char * ergfile, char * line)
 {
+	FILE *fp;
+	int i;
     /* read input file */
     if(get_a_line(stdin,line)) return 1;
     sys->natoms=atoi(line);
@@ -68,6 +70,24 @@ int read_input(mdsys_t* sys, int * nprint, char * restfile, char * trajfile, cha
     sys->fx=(double *)malloc(sys->natoms*sizeof(double));
     sys->fy=(double *)malloc(sys->natoms*sizeof(double));
     sys->fz=(double *)malloc(sys->natoms*sizeof(double));
-    
+
+    fp=fopen(restfile,"r");
+    /* read restart */
+    if(fp) {
+        for (i=0; i<sys->natoms; ++i) {
+            fscanf(fp,"%lf%lf%lf",sys->rx+i, sys->ry+i, sys->rz+i);
+        }
+        for (i=0; i<sys->natoms; ++i) {
+            fscanf(fp,"%lf%lf%lf",sys->vx+i, sys->vy+i, sys->vz+i);
+        }
+        fclose(fp);
+        azzero(sys->fx, sys->natoms);
+        azzero(sys->fy, sys->natoms);
+        azzero(sys->fz, sys->natoms);
+    } else {
+        perror("cannot read restart file");
+        return 3;
+    }
+
     return 0;
 }

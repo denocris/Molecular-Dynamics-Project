@@ -33,30 +33,11 @@ int main(int argc, char **argv)
     test_few_atoms();
     test_kinetic();
 
-    int nprint, i;
+    int nprint;
     char restfile[BLEN], trajfile[BLEN], ergfile[BLEN], line[BLEN];
-    FILE *fp,*traj,*erg;
+    FILE *traj,*erg;
     mdsys_t sys;
-
     read_input(&sys, &nprint,restfile,trajfile,ergfile,line);
-
-    /* read restart */
-    fp=fopen(restfile,"r");
-    if(fp) {
-        for (i=0; i<sys.natoms; ++i) {
-            fscanf(fp,"%lf%lf%lf",sys.rx+i, sys.ry+i, sys.rz+i);
-        }
-        for (i=0; i<sys.natoms; ++i) {
-            fscanf(fp,"%lf%lf%lf",sys.vx+i, sys.vy+i, sys.vz+i);
-        }
-        fclose(fp);
-        azzero(sys.fx, sys.natoms);
-        azzero(sys.fy, sys.natoms);
-        azzero(sys.fz, sys.natoms);
-    } else {
-        perror("cannot read restart file");
-        return 3;
-    }
 
     /* initialize forces and energies.*/
     sys.nfi=0;
