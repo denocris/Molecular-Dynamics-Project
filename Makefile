@@ -1,5 +1,5 @@
 CC=gcc
-CFLAGS=-I. -lm -Wall #add -O3 for optimization, -pg for profiling
+CFLAGS=-I. -lm -Wall -pg -O3 -march=native #add -O3 for optimization, -pg for profiling
 DEPS=$(wildcard src/*.h)
 SRCS=$(wildcard src/*.c)
 #OBJS=$(SRCS:src/.c=Obj-serial/.o)
