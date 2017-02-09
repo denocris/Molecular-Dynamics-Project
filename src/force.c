@@ -4,10 +4,10 @@
 #include <ctype.h>
 
 /* helper function: apply minimum image convention */
-double pbc(double x, const double boxby2)
+double pbc(double x, const double boxby2,const double twice_boxby2)
 {
-    while (x >  boxby2) x -= 2.0*boxby2;
-    while (x < -boxby2) x += 2.0*boxby2;
+    while (x >  boxby2) x -= twice_boxby2;
+    while (x < -boxby2) x += twice_boxby2;
     return x;
 }
 
@@ -27,9 +27,11 @@ void ekin(mdsys_t *sys)
 /* compute forces */
 void force(mdsys_t *sys) 
 {
-    double r,ffac;
+    double ffac;
     double rx,ry,rz;
     int i,j;
+    const double half_box = 0.5*sys->box;
+    const double twice_boxby2 = sys->box;
 
     /* zero energy and forces */
     sys->epot=0.0;
@@ -41,7 +43,7 @@ void force(mdsys_t *sys)
 	
 	double c12 = 4.0*sys->epsilon*pow(sys->sigma,12.0);
 	double c6 = 4.0*sys->epsilon*pow(sys->sigma,6.0);
-	double rcsq = sys->rcut * sys->rcut;
+	const double rcsq = sys->rcut * sys->rcut;
 	double rsq,rinv,r6;
 	
     for(i=0; i < (sys->natoms)-1; ++i) {
@@ -51,9 +53,9 @@ void force(mdsys_t *sys)
             //if (i==j) continue; //With 3rd law we can eliminate this
             
             /* get distance between particle i and j */
-            rx=pbc(sys->rx[i] - sys->rx[j], 0.5*sys->box);
-            ry=pbc(sys->ry[i] - sys->ry[j], 0.5*sys->box);
-            rz=pbc(sys->rz[i] - sys->rz[j], 0.5*sys->box);
+            rx=pbc(sys->rx[i] - sys->rx[j], half_box,twice_boxby2);
+            ry=pbc(sys->ry[i] - sys->ry[j], half_box,twice_boxby2);
+            rz=pbc(sys->rz[i] - sys->rz[j], half_box,twice_boxby2);
             //r = sqrt(rx*rx + ry*ry + rz*rz);
       
             /* compute force and energy if within cutoff */
