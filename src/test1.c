@@ -2,13 +2,22 @@
 
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 #include "prototypes.h"
 #include "utilities.h"
 #include "force.h"
 
+int tollerance(double a, double b){
+  if(abs(a-b) < 1e-12)
+    return 1;
+  return 0;
+}
+
 
 void test_few_atoms(){
+
+    /* Testing a one dimensional system */
 
     mdsys_t sys;
 
@@ -39,20 +48,32 @@ void test_few_atoms(){
     azzero(sys.vx, sys.natoms);
     azzero(sys.vy, sys.natoms);
     azzero(sys.vz, sys.natoms);
-    azzero(sys.fx, sys.natoms);
-    azzero(sys.fy, sys.natoms);
-    azzero(sys.fz, sys.natoms);
 
-    sys.rx[0] = 0;
-    sys.rx[1] = 8.0; // half of the box length
+    sys.rx[0] = 1;
+    sys.rx[1] = 1+sys.sigma;
 
     sys.vx[0] = 10.0;
     sys.vx[1] = 5.0;
 
     force(&sys);
-    ekin(&sys);
+    //printf("Potential Energy: %f\n", sys.epot);
+    //printf("Force 0: %f\n", sys.fx[0]);
+    //printf("Force 1: %f\n", sys.fx[1]);
 
-    printf("Kinetic Energy %f\n", sys.ekin);
+
+    /* For a two particles system, the forces must be equal and opposite */
+    if(tollerance(sys.fx[0], -sys.fx[1]))
+      printf("Equal and opposite force test: OK \n");
+    else
+      printf("Equal and opposite force test: FAILED \n");
+      
+
+    /* At r = sigma the potential energy must be zero */
+    if(tollerance(sys.epot,0))
+      printf("Zero potential energy test: OK \n");
+    else
+      printf("Zero potential energy test: FAILED \n");
+
 
     free(sys.rx);
     free(sys.ry);
