@@ -29,7 +29,7 @@ const double mvsq2e=2390.05736153349; /* m*v^2 in kcal/mol */
 int main(int argc, char **argv)
 {
     /* Test sections */
-	
+
 	if(argc>1)
 	{
 		test_few_atoms();
@@ -40,6 +40,7 @@ int main(int argc, char **argv)
     char restfile[BLEN], trajfile[BLEN], ergfile[BLEN], line[BLEN];
     FILE *traj,*erg;
     mdsys_t sys;
+
     read_input(&sys, &nprint,restfile,trajfile,ergfile,line);
 
     /* initialize forces and energies.*/
