@@ -63,14 +63,14 @@ test: test_1 test_2
 	@./test_2
 
 test_1: src/test1.o $(TARGET).so
-	$(CC) $^ -o $@ -Wl,-rpath=. -lm
+	$(CC) $^ -o $@ -Wl,-rpath,. -lm
 
 src/test_1.o: src/test1.c
 	$(CC) -c $^ -o $@ -I.
 
 
 test_2: src/test2.o $(TARGET).so
-	$(CC) $^ -o $@ -Wl,-rpath=. -lm
+	$(CC) $^ -o $@ -Wl,-rpath,. -lm
 
 src/test_2.o: src/test2.c
 	$(CC) -c $^ -o $@ -I.
