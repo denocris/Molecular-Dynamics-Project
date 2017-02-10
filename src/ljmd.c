@@ -17,8 +17,6 @@
 #include "force.h"
 #include "output.h"
 #include "verlet1.h"
-#include "test1.h"
-#include "test2.h"
 
 /* a few physical constants */
 const double kboltz=0.0019872067;     /* boltzman constant in kcal/mol/K */
@@ -28,18 +26,13 @@ const double mvsq2e=2390.05736153349; /* m*v^2 in kcal/mol */
 /* main */
 int main(int argc, char **argv)
 {
-    /* Test sections */
-	
-	if(argc>1)
-	{
-		test_few_atoms();
-		test_kinetic();
-	}
+
 
     int nprint;
     char restfile[BLEN], trajfile[BLEN], ergfile[BLEN], line[BLEN];
     FILE *traj,*erg;
     mdsys_t sys;
+
     read_input(&sys, &nprint,restfile,trajfile,ergfile,line);
 
     /* initialize forces and energies.*/

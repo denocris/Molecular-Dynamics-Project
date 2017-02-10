@@ -8,14 +8,14 @@
 #include "utilities.h"
 #include "force.h"
 
+
 int tollerance(double a, double b){
   if(abs(a-b) < 1e-12)
     return 1;
   return 0;
 }
 
-
-void test_few_atoms(){
+void test_force_and_potential(){
 
     /* Testing a one dimensional system */
 
@@ -56,9 +56,6 @@ void test_few_atoms(){
     sys.vx[1] = 5.0;
 
     force(&sys);
-    //printf("Potential Energy: %f\n", sys.epot);
-    //printf("Force 0: %f\n", sys.fx[0]);
-    //printf("Force 1: %f\n", sys.fx[1]);
 
 
     /* For a two particles system, the forces must be equal and opposite */
@@ -66,7 +63,7 @@ void test_few_atoms(){
       printf("Equal and opposite force test: OK \n");
     else
       printf("Equal and opposite force test: FAILED \n");
-      
+
 
     /* At r = sigma the potential energy must be zero */
     if(tollerance(sys.epot,0))
@@ -85,4 +82,13 @@ void test_few_atoms(){
     free(sys.fy);
     free(sys.fz);
 
+}
+
+
+
+int main(int argc, char const *argv[]) {
+
+  test_force_and_potential();
+
+  return 0;
 }
